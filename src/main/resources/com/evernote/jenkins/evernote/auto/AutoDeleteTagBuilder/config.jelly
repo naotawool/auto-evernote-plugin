@@ -1,0 +1,29 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <!--
+    This jelly script is used for per-project configuration.
+
+    See global.jelly for a general discussion about jelly script.
+  -->
+
+  <!--
+    Creates a text field that shows the value of the "name" property.
+    When submitted, it will be passed to the corresponding constructor parameter.
+  -->
+
+  <f:entry title="Free word" field="word" name="word">
+    <f:textbox />
+  </f:entry>
+  <f:radioBlock title="process target tag" name="target" value="Tag" checked="${instance.action == 'Tag' || instance.action == null}">
+    <f:entry title="Tag Process Type" field="tagProcessType">
+      <f:select />
+    </f:entry>
+    <f:entry title="Present tag" field="tagGuid">
+      <f:select />
+    </f:entry>
+  </f:radioBlock>
+  <f:radioBlock title="Change target notebook" name="target" value="Notebook" checked="${instance.action == 'Notebook'}">
+    <f:entry title="Change notebook" field="notebookGuid">
+      <f:select />
+    </f:entry>
+  </f:radioBlock>
+</j:jelly>
