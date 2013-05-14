@@ -5,45 +5,45 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 
-import com.evernote.jenkins.evernote.auto.ProcessType.NullProcessType;
+import com.evernote.jenkins.evernote.auto.AutoAction.NullAction;
 
-public enum ActionType {
+public enum TargetType {
 
     NOTEBOOK("Notebook", "notebookGuid") {
 
         @Override
-        public ProcessType getProcessType(JSONObject target) {
-            return NullProcessType.getInstance();
+        public AutoAction resolveAction(JSONObject target) {
+            return NullAction.getInstance();
         }
     },
 
     TAG("Tag", "tagGuid") {
         @Override
-        public ProcessType getProcessType(JSONObject target) {
-            return TagProcessType.labelOf(target.getString("tagProcessType"));
+        public AutoAction resolveAction(JSONObject target) {
+            return TagAction.labelOf(target.getString("tagAction"));
         }
     };
 
     private final String label;
     private final String guidKey;
 
-    private ActionType(String label, String guidKey) {
+    private TargetType(String label, String guidKey) {
         this.label = label;
         this.guidKey = guidKey;
     }
 
-    private static final Map<String, ActionType> LABEL_MAP = new HashMap<>();
+    private static final Map<String, TargetType> LABEL_MAP = new HashMap<>();
     static {
-        for (ActionType type : values()) {
+        for (TargetType type : values()) {
             LABEL_MAP.put(type.label, type);
         }
     }
 
-    public static ActionType labelOf(String label) {
+    public static TargetType labelOf(String label) {
         return LABEL_MAP.get(label);
     }
 
-    public abstract ProcessType getProcessType(JSONObject target);
+    public abstract AutoAction resolveAction(JSONObject target);
 
     public String getGuid(JSONObject target) {
         return target.getString(guidKey);

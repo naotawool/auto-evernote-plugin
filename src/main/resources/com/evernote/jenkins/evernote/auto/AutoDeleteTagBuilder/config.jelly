@@ -13,15 +13,15 @@
   <f:entry title="Free word" field="word" name="word">
     <f:textbox />
   </f:entry>
-  <f:radioBlock title="process target tag" name="target" value="Tag" checked="${instance.action == 'Tag' || instance.action == null}">
-    <f:entry title="Tag Process Type" field="tagProcessType">
+  <f:radioBlock title="process target tag" name="target" value="Tag" checked="${instance.target == 'Tag' || instance.action == null}">
+    <f:entry title="Tag Process Type" field="tagAction">
       <f:select />
     </f:entry>
     <f:entry title="Present tag" field="tagGuid">
       <f:select />
     </f:entry>
   </f:radioBlock>
-  <f:radioBlock title="Change target notebook" name="target" value="Notebook" checked="${instance.action == 'Notebook'}">
+  <f:radioBlock title="Change target notebook" name="target" value="Notebook" checked="${instance.target == 'Notebook'}">
     <f:entry title="Change notebook" field="notebookGuid">
       <f:select />
     </f:entry>

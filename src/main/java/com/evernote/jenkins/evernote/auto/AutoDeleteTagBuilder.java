@@ -24,24 +24,25 @@ import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.Tag;
+import com.evernote.jenkins.plugin.NoteDisplay;
 import com.evernote.jenkins.plugin.NoteStoreWrapper;
 
 public class AutoDeleteTagBuilder extends Builder {
 
     private final String word;
-    private final ActionType actionType;
-    private final ProcessType processType;
+    private final TargetType targetType;
+    private final AutoAction autoAction;
     private final String guid;
 
     private transient final NoteStoreWrapper noteStore;
 
     @DataBoundConstructor
-    public AutoDeleteTagBuilder(String word, ActionType actionType, ProcessType processType,
+    public AutoDeleteTagBuilder(String word, TargetType targetType, AutoAction autoAction,
             String guid) {
 
         this.word = word;
-        this.actionType = actionType;
-        this.processType = processType;
+        this.targetType = targetType;
+        this.autoAction = autoAction;
         this.guid = guid;
 
         this.noteStore = NoteStoreWrapper.newInitializedInstance(developerToken(), useProduction());
@@ -51,16 +52,16 @@ public class AutoDeleteTagBuilder extends Builder {
         return word;
     }
 
-    public ActionType getActionType() {
-        return actionType;
+    public TargetType getTargetType() {
+        return targetType;
     }
 
-    public String getAction() {
-        return actionType.getLabel();
+    public String getTarget() {
+        return targetType.getLabel();
     }
 
-    public String getTagProcessType() {
-        return processType.key();
+    public String getTagActionAsString() {
+        return autoAction.key();
     }
 
     public String getNotebookGuid() {
@@ -85,10 +86,10 @@ public class AutoDeleteTagBuilder extends Builder {
 
         NoteList notes = findTargetNotes();
 
-        listener.getLogger().println("Process type is " + processType);
+        listener.getLogger().println("Process type is " + autoAction);
 
         // TODO Not implemented 'Notebook' action.
-        if (actionType == ActionType.NOTEBOOK) {
+        if (targetType == TargetType.NOTEBOOK) {
             build.setResult(Result.UNSTABLE);
             listener.getLogger().println("Not implemented 'Notebook' action!!");
             return true;
@@ -101,12 +102,12 @@ public class AutoDeleteTagBuilder extends Builder {
         }
 
         for (Note note : notes.getNotes()) {
-            processType.doProcess(note, guid);
-            processType.printLog(listener.getLogger());
+            autoAction.doProcess(note, guid);
+            autoAction.printLog(listener.getLogger());
 
             noteStore.updateNote(note);
 
-            listener.getLogger().println("Note: " + note);
+            listener.getLogger().println("Note: " + NoteDisplay.of(note));
         }
 
         return true;
@@ -146,15 +147,15 @@ public class AutoDeleteTagBuilder extends Builder {
 
             JSONObject target = formData.getJSONObject("target");
 
-            ActionType actionType = ActionType.labelOf(target.getString("value"));
-            if (actionType == null) {
+            TargetType targetType = TargetType.labelOf(target.getString("value"));
+            if (targetType == null) {
                 throw new FormException("'Tag' もしくは 'Notebook' を指定してください。", "value");
             }
 
-            ProcessType processType = actionType.getProcessType(target);
-            String guid = actionType.getGuid(target);
+            AutoAction action = targetType.resolveAction(target);
+            String guid = targetType.getGuid(target);
 
-            return new AutoDeleteTagBuilder(word, actionType, processType, guid);
+            return new AutoDeleteTagBuilder(word, targetType, action, guid);
         }
 
         /**
@@ -172,10 +173,10 @@ public class AutoDeleteTagBuilder extends Builder {
             return FormValidation.ok();
         }
 
-        public ListBoxModel doFillTagProcessTypeItems() {
+        public ListBoxModel doFillTagActionItems() {
             ListBoxModel items = new ListBoxModel();
-            for (TagProcessType type : TagProcessType.values()) {
-                items.add(type.toString());
+            for (TagAction action : TagAction.values()) {
+                items.add(action.toString());
             }
             return items;
         }

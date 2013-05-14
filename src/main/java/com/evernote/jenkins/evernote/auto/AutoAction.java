@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import com.evernote.edam.type.Note;
 
-public interface ProcessType {
+public interface AutoAction {
 
     public String key();
 
@@ -12,18 +12,18 @@ public interface ProcessType {
 
     public void printLog(PrintStream printStream);
 
-    public static class NullProcessType implements ProcessType {
+    public static class NullAction implements AutoAction {
 
-        private final static NullProcessType INSTANCE = new NullProcessType();
+        private final static NullAction INSTANCE = new NullAction();
 
         /**
          * インスタンス化を抑制。
          */
-        private NullProcessType() {
+        private NullAction() {
             // NOP
         }
 
-        public static NullProcessType getInstance() {
+        public static NullAction getInstance() {
             return INSTANCE;
         }
 

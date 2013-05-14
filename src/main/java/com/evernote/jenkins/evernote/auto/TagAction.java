@@ -10,7 +10,7 @@ import org.apache.commons.collections.CollectionUtils;
 
 import com.evernote.edam.type.Note;
 
-public enum TagProcessType implements ProcessType {
+public enum TagAction implements AutoAction {
 
     ADD("Add") {
         @Override
@@ -48,7 +48,7 @@ public enum TagProcessType implements ProcessType {
 
     private final String label;
 
-    private TagProcessType(final String label) {
+    private TagAction(final String label) {
         this.label = label;
     }
 
@@ -62,14 +62,14 @@ public enum TagProcessType implements ProcessType {
         return label;
     }
 
-    private static final Map<String, TagProcessType> LABEL_MAP = new HashMap<>();
+    private static final Map<String, TagAction> LABEL_MAP = new HashMap<>();
     static {
-        for (TagProcessType type : values()) {
+        for (TagAction type : values()) {
             LABEL_MAP.put(type.label, type);
         }
     }
 
-    public static TagProcessType labelOf(String label) {
+    public static TagAction labelOf(String label) {
         return LABEL_MAP.get(label);
     }
 }
