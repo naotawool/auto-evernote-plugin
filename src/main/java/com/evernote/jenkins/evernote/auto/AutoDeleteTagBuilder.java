@@ -45,7 +45,8 @@ public class AutoDeleteTagBuilder extends Builder {
         this.autoAction = autoAction;
         this.guid = guid;
 
-        this.noteStore = NoteStoreWrapper.newInitializedInstance(developerToken(), useProduction());
+        this.noteStore = new NoteStoreWrapper(developerToken(), useProduction());
+        this.noteStore.initialize();
     }
 
     public String getWord() {
@@ -190,8 +191,8 @@ public class AutoDeleteTagBuilder extends Builder {
         }
 
         private List<Tag> getTags() {
-            NoteStoreWrapper noteStore = NoteStoreWrapper.newInitializedInstance(//
-                    developerToken(), useProduction());
+            NoteStoreWrapper noteStore = new NoteStoreWrapper(developerToken(), useProduction());
+            noteStore.initialize();
             return noteStore.listTags();
         }
 
@@ -204,8 +205,8 @@ public class AutoDeleteTagBuilder extends Builder {
         }
 
         private List<Notebook> getNotebooks() {
-            NoteStoreWrapper noteStore = NoteStoreWrapper.newInitializedInstance(//
-                    developerToken(), useProduction());
+            NoteStoreWrapper noteStore = new NoteStoreWrapper(developerToken(), useProduction());
+            noteStore.initialize();
             return noteStore.listNotebooks();
         }
 

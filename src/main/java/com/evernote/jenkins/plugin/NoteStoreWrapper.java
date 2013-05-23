@@ -23,23 +23,41 @@ public class NoteStoreWrapper {
     private static final int MAX_NOTES = 1000;
 
     private final String token;
-    private final NoteStore.Client noteStore;
+    private final boolean useProduction;
+    private NoteStore.Client noteStore;
 
-    private NoteStoreWrapper(String token, NoteStore.Client noteStore) {
-        this.token = token;
+    private UserStoreFactory userStoreFactory;
+    private NoteStoreFactory noteStoreFactory;
+
+    public NoteStoreWrapper(String developerToken, boolean useProduction) {
+        this.token = developerToken;
+        this.useProduction = useProduction;
+    }
+
+    public void initialize() {
+        initializeFactory();
+
+        UserStore.Client userStore = userStoreFactory.create(useProduction);
+        NoteStore.Client noteStore = noteStoreFactory.create(token, userStore);
+
         this.noteStore = noteStore;
     }
 
-    public static NoteStoreWrapper newInitializedInstance(String developerToken,
-            boolean useProduction) {
-        NoteStore.Client noteStore = initializeNoteStore(developerToken, useProduction);
-        return new NoteStoreWrapper(developerToken, noteStore);
+    private void initializeFactory() {
+        if (this.userStoreFactory == null) {
+            this.userStoreFactory = new UserStoreFactory();
+        }
+        if (this.noteStoreFactory == null) {
+            this.noteStoreFactory = new NoteStoreFactory();
+        }
     }
 
-    private static NoteStore.Client initializeNoteStore(String developerToken, boolean useProduction) {
-        UserStore.Client userStore = new UserStoreFactory().create(useProduction);
-        NoteStore.Client noteStore = new NoteStoreFactory().create(developerToken, userStore);
-        return noteStore;
+    void setUserStoreFactory(UserStoreFactory userStoreFactory) {
+        this.userStoreFactory = userStoreFactory;
+    }
+
+    void setNoteStoreFactory(NoteStoreFactory noteStoreFactory) {
+        this.noteStoreFactory = noteStoreFactory;
     }
 
     public List<Tag> listTags() {
@@ -83,7 +101,7 @@ public class NoteStoreWrapper {
         try {
             noteList = noteStore.findNotes(token, filter, 0, MAX_NOTES);
         } catch (EDAMUserException | EDAMSystemException | EDAMNotFoundException | TException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
         return noteList;
     }
@@ -92,7 +110,7 @@ public class NoteStoreWrapper {
         try {
             return noteStore.updateNote(token, note);
         } catch (EDAMUserException | EDAMSystemException | EDAMNotFoundException | TException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 }
