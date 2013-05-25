@@ -33,11 +33,11 @@ public final class TestUtils {
     /**
      * リフレクションを使用してフィールド値を取得する。
      *
+     * @see org.springframework.test.util.ReflectionTestUtils#getField(Object,
+     *      String)
      * @param target オブジェクト
      * @param name フィールド名
      * @return フィールド値
-     * @see org.springframework.test.util.ReflectionTestUtils#getField(Object,
-     *      String)
      */
     public static Object getField(Object target, String name) {
         Assert.notNull(target, "Target object must not be null");
@@ -49,5 +49,38 @@ public final class TestUtils {
 
         ReflectionUtils.makeAccessible(field);
         return ReflectionUtils.getField(field, target);
+    }
+
+    /**
+     * リフレクションを使用して、オブジェクトに値を設定する。
+     *
+     * @param target オブジェクト
+     * @param name フィールド名
+     * @param value 設定する値
+     */
+    public static void setField(Object target, String name, Object value) {
+        setField(target, name, value, null);
+    }
+
+    /**
+     * リフレクションを使用して、オブジェクトに値を設定する。
+     *
+     * @see org.springframework.test.util.ReflectionTestUtils#setField(Object,
+     *      String, Object, Class)
+     * @param target オブジェクト
+     * @param name フィールド名
+     * @param value 設定する値
+     * @param type 設定する値の型
+     */
+    public static void setField(Object target, String name, Object value, Class<?> type) {
+        Assert.notNull(target, "Target object must not be null");
+        Field field = ReflectionUtils.findField(target.getClass(), name, type);
+        if (field == null) {
+            throw new IllegalArgumentException("Could not find field [" + name + "] on target ["
+                    + target + "]");
+        }
+
+        ReflectionUtils.makeAccessible(field);
+        ReflectionUtils.setField(field, target, value);
     }
 }
