@@ -65,7 +65,7 @@ public class TargetNotesParameterDefinition extends ParameterDefinition implemen
             return Collections.emptyList();
         }
 
-        AutoDeleteTagBuilder evernoteBuilder = getBuilder((FreeStyleProject) target);
+        AutoActionBuilder evernoteBuilder = getBuilder((FreeStyleProject) target);
         if (evernoteBuilder == null) {
             return Collections.emptyList();
         }
@@ -84,10 +84,10 @@ public class TargetNotesParameterDefinition extends ParameterDefinition implemen
                 .getProperty(ParametersDefinitionProperty.class);
     }
 
-    private AutoDeleteTagBuilder getBuilder(FreeStyleProject project) {
+    private AutoActionBuilder getBuilder(FreeStyleProject project) {
         for (Builder builder : project.getBuilders()) {
-            if (AutoDeleteTagBuilder.class.isInstance(builder)) {
-                return (AutoDeleteTagBuilder) builder;
+            if (AutoActionBuilder.class.isInstance(builder)) {
+                return (AutoActionBuilder) builder;
             }
         }
         return null;

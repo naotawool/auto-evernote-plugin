@@ -27,7 +27,7 @@ import com.evernote.edam.type.Tag;
 import com.evernote.jenkins.plugin.NoteDisplay;
 import com.evernote.jenkins.plugin.NoteStoreWrapper;
 
-public class AutoDeleteTagBuilder extends Builder {
+public class AutoActionBuilder extends Builder {
 
     private final String word;
     private final TargetType targetType;
@@ -37,7 +37,7 @@ public class AutoDeleteTagBuilder extends Builder {
     private transient final NoteStoreWrapper noteStore;
 
     @DataBoundConstructor
-    public AutoDeleteTagBuilder(String word, TargetType targetType, AutoAction autoAction,
+    public AutoActionBuilder(String word, TargetType targetType, AutoAction autoAction,
             String guid) {
 
         this.word = word;
@@ -124,10 +124,10 @@ public class AutoDeleteTagBuilder extends Builder {
     }
 
     /**
-     * Descriptor for {@link AutoDeleteTagBuilder}. Used as a singleton. The
+     * Descriptor for {@link AutoActionBuilder}. Used as a singleton. The
      * class is marked as public so that it can be accessed from views.
      *
-     * @see {@code src/main/resources/com.evernote.jenkins.evernote.auto/AutoDeleteTagBuilder/*.jelly}
+     * @see {@code src/main/resources/com.evernote.jenkins.evernote.auto/AutoActionBuilder/*.jelly}
      */
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Builder> {
@@ -156,7 +156,7 @@ public class AutoDeleteTagBuilder extends Builder {
             AutoAction action = targetType.resolveAction(target);
             String guid = targetType.getGuid(target);
 
-            return new AutoDeleteTagBuilder(word, targetType, action, guid);
+            return new AutoActionBuilder(word, targetType, action, guid);
         }
 
         /**
