@@ -24,7 +24,7 @@
 
 <!-- this is the page fragment displayed when triggering a new build -->
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
-  <f:entry title="以下のノートが処理対象となります。">
+  <f:entry title="${%Please make a note to be processed.}">
     <!-- this div is required because of ParametersDefinitionProperty.java#117 -->
     <div name="parameter">
       <input type="hidden" name="name" value="${it.name}" />
@@ -32,9 +32,9 @@
       <p>
       <table>
         <tr>
-          <th>タイトル</th>
-          <th>作成日</th>
-          <th>最終更新日</th>
+          <th>${%Title}</th>
+          <th>${%Created}</th>
+          <th>${%Last updated}</th>
         </tr>
         <j:forEach var="targetNote" items="${it.targetNotes}">
           <tr>

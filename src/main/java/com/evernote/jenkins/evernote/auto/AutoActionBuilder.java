@@ -37,8 +37,7 @@ public class AutoActionBuilder extends Builder {
     private transient final NoteStoreWrapper noteStore;
 
     @DataBoundConstructor
-    public AutoActionBuilder(String word, TargetType targetType, AutoAction autoAction,
-            String guid) {
+    public AutoActionBuilder(String word, TargetType targetType, AutoAction autoAction, String guid) {
 
         this.word = word;
         this.targetType = targetType;
@@ -124,8 +123,8 @@ public class AutoActionBuilder extends Builder {
     }
 
     /**
-     * Descriptor for {@link AutoActionBuilder}. Used as a singleton. The
-     * class is marked as public so that it can be accessed from views.
+     * Descriptor for {@link AutoActionBuilder}. Used as a singleton. The class
+     * is marked as public so that it can be accessed from views.
      *
      * @see {@code src/main/resources/com.evernote.jenkins.evernote.auto/AutoActionBuilder/*.jelly}
      */
@@ -143,14 +142,14 @@ public class AutoActionBuilder extends Builder {
         public Builder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             String word = formData.getString("word");
             if (StringUtils.isEmpty(word)) {
-                throw new FormException("対象のノートを検索する条件を指定してください。", "word");
+                throw new FormException(Messages.AutoEvernote_required_developerToken(), "word");
             }
 
             JSONObject target = formData.getJSONObject("target");
 
             TargetType targetType = TargetType.labelOf(target.getString("value"));
             if (targetType == null) {
-                throw new FormException("'Tag' もしくは 'Notebook' を指定してください。", "value");
+                throw new FormException(Messages.AutoEvernote_required_actionType(), "value");
             }
 
             AutoAction action = targetType.resolveAction(target);
@@ -169,7 +168,7 @@ public class AutoActionBuilder extends Builder {
          */
         public FormValidation doCheckWord(@QueryParameter String value) {
             if (value.length() == 0) {
-                return FormValidation.error("対象のノートを検索する条件を指定してください。");
+                return FormValidation.error(Messages.AutoEvernote_required_developerToken());
             }
             return FormValidation.ok();
         }
@@ -219,7 +218,7 @@ public class AutoActionBuilder extends Builder {
          * This human readable name is used in the configuration screen.
          */
         public String getDisplayName() {
-            return "Auto Evernote";
+            return Messages.AutoActionBuilder_displayName();
         }
     }
 }

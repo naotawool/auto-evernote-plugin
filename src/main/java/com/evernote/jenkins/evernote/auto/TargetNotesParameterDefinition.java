@@ -144,7 +144,7 @@ public class TargetNotesParameterDefinition extends ParameterDefinition implemen
 
         @Override
         public String getDisplayName() {
-            return "事前に対象ノートを確認";
+            return Messages.TargetNotesParameterDefinition_displayName();
         }
     }
 }

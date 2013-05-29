@@ -1,0 +1,74 @@
+
+<pre>
+<a href="http://dev.evernote.com/intl/jp/documentation/cloud/chapters/search_grammar.php" target="_blank">Everntoe の検索構文</a>
+
+■notebook:[notebook name]
+・ノートブックの名前を指定して検索します。
+・この条件は、検索条件の先頭でなければいけません。
+
+■any:[word]
+・この式が条件の先頭にあった場合、これ以降の任意の検索項目のいずれかに一致するノートを対象とする
+
+■リテラル項目の一致
+・大文字/小文字は区別されない
+・ワイルドカードは末尾しか有効にならない（e.g. Ever*）
+・「-word」とした場合、否定を表す
+
+■tag:[tag name]
+・tag:cooking -> "cooking" というタグを含む任意のノートを対象とする
+・tag:cook*   -> "cook" で始まるタグを含む任意のノートを対象とする
+・-tag:cook*  -> "cook" で始まるタグを含まない任意のノートを対象とする
+・tag:*       -> 少なくとも 1 つのタグを含む任意のノートを対象とする
+・-tag:*      -> タグを含んでいない任意のノートを対象とする
+
+■intitle:[literal]
+・intitle:chicken  -> "chicken" という単語をタイトルに含む任意のノートを対象とする
+・-intitle:chicken -> "chicken" という単語をタイトルに含んでいない任意のノートを対象とする
+
+■created:[datetime]
+・created:20070704           -> 2007/07/04 以降に作成されたノートを対象とする
+・created:20070704T090000    -> 2007/07/04 9:00 以降に作成されたノートを対象とする
+・created:20070704T150000    -> 2007/07/04 15:00 以降に作成されたノートを対象とする
+・-created:20070704          -> 2007/07/04 より前に作成されたノートを対象とする
+・created:day-1              -> 昨日または今日作成されたノートを対象とする
+・-created:day               -> 今日より前に作成されたノートを対象とする
+・created:day-1 -created:day -> 昨日作成されたノートを対象とする
+・created:day-30             -> 過去30日以内に作成されたノートを対象とする
+・created:week               -> カレンダー上の今週中（日曜～土曜）に作成されたノートを対象とする
+・-created:month             -> 今月より前に作成されたノートを対象とする
+・created:year-1             -> 昨年または今年作成されたノートを対象とする
+
+■updated:[datetime]
+・フォーマットについては、上記 created の指定内容と同じ。
+
+■resource:[MIME type string]
+・resource:image/gif -> 少なくとも 1 つの image/gif リソースを含むノートを対象とする
+・resource:audio/*   -> 少なくとも 1 つの audio リソースを含むノートを対象とする
+・-resource:image/*  -> イメージを含まないノートを対象とする
+
+■author:[string]
+・author:robert* -> author 属性に "robert" を含むノートを対象とする
+・-author:*      -> author 属性が設定されていないノートを対象とする
+
+■source:[string]
+・source:web.clip  -> Evernote Web Clipper を使用している Web ページからクリップしたノートを対象とする
+・source:mail.clip -> ローカルなメールクライアントからクリップしたノートを対象とする
+
+■日付および時刻引数
+＜現在日時が [2007年10月31日(日) 13:30:56] の場合＞
+・day     -> 2007/10/31 00:00:00
+・day-1   -> 2007/10/30 00:00:00
+・day-14  -> 2007/10/17 00:00:00
+・week    -> 2007/10/28(日) 00:00:00（現在日時の週の頭の日曜）
+・week-2  -> 2007/10/14(日) 00:00:00（現在日時の週の 2 週間前の日曜）
+・month   -> 2007/10/1 00:00:00（現在日時の月初）
+・month-1 -> 2007/9/1 00:00:00（現在日時の前の月の月初）
+・year    -> 2007/1/1 00:00:00（現在日時の元旦）
+・year-3  -> 2004/1/1 00:00:00（現在日時の 3 年前の元旦）
+
+■まとめ
+・chicken tag:cooking created:year
+  単語 "chicken" を含み、タグ "cooking" を持つノートのうち、今年作成されたものを対象とする
+・any: "San Francisco" tag:SFO
+  単語 "San Francisco" をテキストに含んでいるか、またはタグ "SFO" を含んだノートを対象とする
+</pre>
