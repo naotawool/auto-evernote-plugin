@@ -57,8 +57,42 @@ public final class EvernoteRule implements TestRule {
 
             @Override
             public void evaluate() throws Throwable {
+                verify();
                 before();
                 base.evaluate();
+            }
+
+            private void verify() {
+                // assumeThat(token, is(notNullValue()));
+            }
+
+            private void before() throws Exception {
+                THttpClient userStoreTrans;
+                try {
+                    userStoreTrans = new THttpClient(resolveUrl());
+                } catch (TTransportException e) {
+                    throw new Exception(e);
+                }
+                TBinaryProtocol userStoreProtocol = new TBinaryProtocol(userStoreTrans);
+
+                UserStore.Client userStore = new UserStore.Client(userStoreProtocol);
+
+                String noteStoreUrl;
+                try {
+                    noteStoreUrl = userStore.getNoteStoreUrl(token);
+                } catch (EDAMUserException | EDAMSystemException | TException e) {
+                    throw new Exception(e);
+                }
+
+                THttpClient noteStoreTrans;
+                try {
+                    noteStoreTrans = new THttpClient(noteStoreUrl);
+                } catch (TTransportException e) {
+                    throw new Exception(e);
+                }
+                TBinaryProtocol noteStoreProt = new TBinaryProtocol(noteStoreTrans);
+
+                noteStore = new NoteStore.Client(noteStoreProt);
             }
         };
     }
@@ -132,35 +166,6 @@ public final class EvernoteRule implements TestRule {
             return null;
         }
         return list.get(0);
-    }
-
-    protected void before() throws Exception {
-        THttpClient userStoreTrans;
-        try {
-            userStoreTrans = new THttpClient(resolveUrl());
-        } catch (TTransportException e) {
-            throw new Exception(e);
-        }
-        TBinaryProtocol userStoreProtocol = new TBinaryProtocol(userStoreTrans);
-
-        UserStore.Client userStore = new UserStore.Client(userStoreProtocol);
-
-        String noteStoreUrl;
-        try {
-            noteStoreUrl = userStore.getNoteStoreUrl(token);
-        } catch (EDAMUserException | EDAMSystemException | TException e) {
-            throw new Exception(e);
-        }
-
-        THttpClient noteStoreTrans;
-        try {
-            noteStoreTrans = new THttpClient(noteStoreUrl);
-        } catch (TTransportException e) {
-            throw new Exception(e);
-        }
-        TBinaryProtocol noteStoreProt = new TBinaryProtocol(noteStoreTrans);
-
-        noteStore = new NoteStore.Client(noteStoreProt);
     }
 
     private String resolveUrl() {
