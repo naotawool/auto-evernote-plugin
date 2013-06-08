@@ -41,6 +41,10 @@ public class EvernoteGlobalConfiguration extends GlobalConfiguration {
         save();
     }
 
+    public String getDisplayName() {
+        return "aaaaaaaaaaaaaaa";
+    }
+
     @Override
     public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
         req.bindJSON(this, json);

@@ -1,0 +1,14 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+    xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+    xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+
+    <f:section title="Evernote">
+        <f:entry title="${%Developer Token}" field="developerToken" name="developerToken" description="${%Please enter Everntoe developer token}">
+            <f:textbox default="token" />
+        </f:entry>
+        <f:entry title="${%Use production environment}" field="production" name="production" description="${%If not checked, using sandbox environment.}">
+            <f:checkbox />
+        </f:entry>
+    </f:section>
+</j:jelly>
