@@ -156,6 +156,10 @@ public final class EvernoteRule implements TestRule {
         return selectNullIfEmpty(finds);
     }
 
+    public Notebook resolveDefaultNotebook() throws Exception {
+        return noteStore.getDefaultNotebook(token);
+    }
+
     private <T> List<T> findObject(List<T> list, Predicate<T> predicate) {
         Collection<T> results = Collections2.filter(list, predicate);
         return Lists.newArrayList(results);

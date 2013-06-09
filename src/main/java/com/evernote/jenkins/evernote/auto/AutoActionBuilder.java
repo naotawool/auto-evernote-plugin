@@ -88,13 +88,6 @@ public class AutoActionBuilder extends Builder {
 
         listener.getLogger().println("Process type is " + autoAction);
 
-        // TODO Not implemented 'Notebook' action.
-        if (targetType == TargetType.NOTEBOOK) {
-            build.setResult(Result.UNSTABLE);
-            listener.getLogger().println("Not implemented 'Notebook' action!!");
-            return true;
-        }
-
         if (StringUtils.isEmpty(guid)) {
             build.setResult(Result.FAILURE);
             listener.getLogger().println("Target GUID is null!!");
@@ -168,7 +161,7 @@ public class AutoActionBuilder extends Builder {
          */
         public FormValidation doCheckWord(@QueryParameter String value) {
             if (value.length() == 0) {
-                return FormValidation.error(Messages.AutoEvernote_required_developerToken());
+                return FormValidation.error(Messages.AutoEvernote_required_searchTargetWord());
             }
             return FormValidation.ok();
         }

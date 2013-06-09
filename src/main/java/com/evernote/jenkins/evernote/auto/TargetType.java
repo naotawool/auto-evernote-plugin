@@ -5,15 +5,14 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 
-import com.evernote.jenkins.evernote.auto.AutoAction.NullAction;
+import com.evernote.jenkins.evernote.auto.action.NotebookAction;
 
 public enum TargetType {
 
     NOTEBOOK("Notebook", "notebookGuid") {
-
         @Override
         public AutoAction resolveAction(JSONObject target) {
-            return NullAction.getInstance();
+            return NotebookAction.getInstance();
         }
     },
 
