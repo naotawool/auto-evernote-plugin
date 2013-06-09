@@ -23,6 +23,7 @@ import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.Tag;
 import com.evernote.jenkins.evernote.auto.action.NotebookAction;
+import com.evernote.jenkins.evernote.auto.action.TagAction;
 import com.evernote.jenkins.rule.EvernoteRule;
 
 /**

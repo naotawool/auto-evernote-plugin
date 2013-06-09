@@ -3,7 +3,6 @@ package com.evernote.jenkins.evernote.auto.action;
 import java.io.PrintStream;
 
 import com.evernote.edam.type.Note;
-import com.evernote.jenkins.evernote.auto.AutoAction;
 
 public class NotebookAction implements AutoAction {
 

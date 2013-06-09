@@ -1,4 +1,4 @@
-package com.evernote.jenkins.evernote.auto;
+package com.evernote.jenkins.evernote.auto.action;
 
 import java.io.PrintStream;
 

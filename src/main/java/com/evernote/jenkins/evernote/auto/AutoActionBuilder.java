@@ -24,6 +24,8 @@ import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.Tag;
+import com.evernote.jenkins.evernote.auto.action.AutoAction;
+import com.evernote.jenkins.evernote.auto.action.TagAction;
 import com.evernote.jenkins.plugin.NoteDisplay;
 import com.evernote.jenkins.plugin.NoteStoreWrapper;
 

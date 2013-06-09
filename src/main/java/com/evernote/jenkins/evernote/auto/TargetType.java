@@ -5,7 +5,9 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 
+import com.evernote.jenkins.evernote.auto.action.AutoAction;
 import com.evernote.jenkins.evernote.auto.action.NotebookAction;
+import com.evernote.jenkins.evernote.auto.action.TagAction;
 
 public enum TargetType {
 
