@@ -113,4 +113,20 @@ public class NoteStoreWrapper {
             throw new RuntimeException(e);
         }
     }
+
+    public Notebook findNotebook(Guid guid) {
+        try {
+            return noteStore.getNotebook(token, guid.get());
+        } catch (EDAMUserException | EDAMSystemException | EDAMNotFoundException | TException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Tag findTag(Guid guid) {
+        try {
+            return noteStore.getTag(token, guid.get());
+        } catch (EDAMUserException | EDAMSystemException | EDAMNotFoundException | TException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

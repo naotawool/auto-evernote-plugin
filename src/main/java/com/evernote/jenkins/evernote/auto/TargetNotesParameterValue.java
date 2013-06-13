@@ -2,32 +2,37 @@ package com.evernote.jenkins.evernote.auto;
 
 import hudson.model.ParameterValue;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
+import com.evernote.jenkins.plugin.Autable;
 import com.evernote.jenkins.plugin.NoteDisplay;
+import com.evernote.jenkins.plugin.Result;
 
 public class TargetNotesParameterValue extends ParameterValue {
 
-    private List<NoteDisplay> notes;
+    private Result result;
 
     @DataBoundConstructor
     public TargetNotesParameterValue(String name) {
-        this(name, new ArrayList<NoteDisplay>(0));
-    }
-
-    public TargetNotesParameterValue(String name, List<NoteDisplay> notes) {
         super(name);
-        this.notes = notes;
     }
 
-    public void setNotes(List<NoteDisplay> notes) {
-        this.notes = notes;
+    public void setResult(Result result) {
+        this.result = result;
     }
 
     public List<NoteDisplay> getNotes() {
-        return notes;
+        return result.getNotes();
+    }
+
+    public Autable getAutable() {
+        return result.getAutable();
+    }
+
+    @Override
+    public String getDescription() {
+        return result.getDescription();
     }
 }

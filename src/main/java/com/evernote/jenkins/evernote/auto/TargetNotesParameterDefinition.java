@@ -10,7 +10,6 @@ import hudson.model.ParametersDefinitionProperty;
 import hudson.tasks.Builder;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +23,9 @@ import org.kohsuke.stapler.StaplerRequest;
 
 import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.type.Note;
+import com.evernote.jenkins.plugin.Autable;
 import com.evernote.jenkins.plugin.NoteDisplay;
+import com.evernote.jenkins.plugin.Result;
 
 public class TargetNotesParameterDefinition extends ParameterDefinition implements
         Comparable<TargetNotesParameterDefinition> {
@@ -43,6 +44,29 @@ public class TargetNotesParameterDefinition extends ParameterDefinition implemen
     }
 
     public List<NoteDisplay> getTargetNotes() {
+        AutoActionBuilder builder = findBuilder();
+
+        NoteList noteList = builder.findTargetNotes();
+        List<NoteDisplay> notes = new ArrayList<>(noteList.getNotes().size());
+        for (Note note : noteList.getNotes()) {
+            notes.add(NoteDisplay.of(note));
+        }
+
+        return notes;
+    }
+
+    public Autable getAutable() {
+        AutoActionBuilder builder = findBuilder();
+        return builder.getAutable();
+    }
+
+    @Override
+    public String getDescription() {
+        AutoActionBuilder builder = findBuilder();
+        return builder.getAutoAction().description();
+    }
+
+    private AutoActionBuilder findBuilder() {
 
         @SuppressWarnings("rawtypes")
         List<AbstractProject> jobs = Jenkins.getInstance().getItems(AbstractProject.class);
@@ -62,21 +86,10 @@ public class TargetNotesParameterDefinition extends ParameterDefinition implemen
         }
 
         if (target == null || not(FreeStyleProject.class.isInstance(target))) {
-            return Collections.emptyList();
+            return null;
         }
 
-        AutoActionBuilder evernoteBuilder = getBuilder((FreeStyleProject) target);
-        if (evernoteBuilder == null) {
-            return Collections.emptyList();
-        }
-
-        NoteList noteList = evernoteBuilder.findTargetNotes();
-        List<NoteDisplay> notes = new ArrayList<>(noteList.getNotes().size());
-        for (Note note : noteList.getNotes()) {
-            notes.add(NoteDisplay.of(note));
-        }
-
-        return notes;
+        return getBuilder((FreeStyleProject) target);
     }
 
     private ParametersDefinitionProperty getParametersProperty(AbstractProject<?, ?> project) {
@@ -125,7 +138,14 @@ public class TargetNotesParameterDefinition extends ParameterDefinition implemen
     @Override
     public ParameterValue createValue(StaplerRequest req, JSONObject formData) {
         TargetNotesParameterValue value = req.bindJSON(TargetNotesParameterValue.class, formData);
-        value.setNotes(getTargetNotes());
+
+        Autable autable = getAutable();
+        String description = getDescription();
+        List<NoteDisplay> notes = getTargetNotes();
+
+        Result result = new Result(autable, description, notes);
+        value.setResult(result);
+
         return value;
     }
 

@@ -32,6 +32,18 @@
       <p>
       <table>
         <tr>
+          <th align="left">処理内容:</th>
+          <td>${it.description}</td>
+        </tr>
+        <tr>
+          <th align="left">対象:</th>
+          <td>${it.autable}</td>
+        </tr>
+      </table>
+      </p>
+      <p>
+      <table>
+        <tr>
           <th>${%Title}</th>
           <th>${%Created}</th>
           <th>${%Last updated}</th>

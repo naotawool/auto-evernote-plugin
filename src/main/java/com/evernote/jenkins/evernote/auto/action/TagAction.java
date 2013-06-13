@@ -9,6 +9,11 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 
 import com.evernote.edam.type.Note;
+import com.evernote.edam.type.Tag;
+import com.evernote.jenkins.evernote.auto.Messages;
+import com.evernote.jenkins.plugin.Autable;
+import com.evernote.jenkins.plugin.Guid;
+import com.evernote.jenkins.plugin.NoteStoreWrapper;
 
 public enum TagAction implements AutoAction {
 
@@ -27,6 +32,11 @@ public enum TagAction implements AutoAction {
         public void printLog(PrintStream printStream) {
             printStream.println("Tag added!!");
         }
+
+        @Override
+        public String description() {
+            return Messages.AutoEvernote_action_description_tag_add();
+        }
     },
 
     DELETE("Delete") {
@@ -44,6 +54,11 @@ public enum TagAction implements AutoAction {
         public void printLog(PrintStream printStream) {
             printStream.println("Tag deleted!!");
         }
+
+        @Override
+        public String description() {
+            return Messages.AutoEvernote_action_description_tag_delete();
+        }
     };
 
     private final String label;
@@ -60,6 +75,12 @@ public enum TagAction implements AutoAction {
     @Override
     public String key() {
         return label;
+    }
+
+    @Override
+    public Autable resolve(NoteStoreWrapper noteStore, Guid guid) {
+        Tag tag = noteStore.findTag(guid);
+        return new com.evernote.jenkins.plugin.Tag(tag);
     }
 
     private static final Map<String, TagAction> LABEL_MAP = new HashMap<>();

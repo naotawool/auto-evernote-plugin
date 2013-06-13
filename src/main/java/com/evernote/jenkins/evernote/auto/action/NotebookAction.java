@@ -3,6 +3,11 @@ package com.evernote.jenkins.evernote.auto.action;
 import java.io.PrintStream;
 
 import com.evernote.edam.type.Note;
+import com.evernote.edam.type.Notebook;
+import com.evernote.jenkins.evernote.auto.Messages;
+import com.evernote.jenkins.plugin.Autable;
+import com.evernote.jenkins.plugin.Guid;
+import com.evernote.jenkins.plugin.NoteStoreWrapper;
 
 public class NotebookAction implements AutoAction {
 
@@ -28,7 +33,18 @@ public class NotebookAction implements AutoAction {
     }
 
     @Override
+    public String description() {
+        return Messages.AutoEvernote_action_description_notebook_change();
+    }
+
+    @Override
     public String toString() {
         return "'Change notebook'";
+    }
+
+    @Override
+    public Autable resolve(NoteStoreWrapper noteStore, Guid guid) {
+        Notebook notebook = noteStore.findNotebook(guid);
+        return new com.evernote.jenkins.plugin.Notebook(notebook);
     }
 }

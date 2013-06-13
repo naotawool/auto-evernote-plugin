@@ -26,6 +26,8 @@ import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.Tag;
 import com.evernote.jenkins.evernote.auto.action.AutoAction;
 import com.evernote.jenkins.evernote.auto.action.TagAction;
+import com.evernote.jenkins.plugin.Autable;
+import com.evernote.jenkins.plugin.Guid;
 import com.evernote.jenkins.plugin.NoteDisplay;
 import com.evernote.jenkins.plugin.NoteStoreWrapper;
 
@@ -60,6 +62,14 @@ public class AutoActionBuilder extends Builder {
 
     public String getTarget() {
         return targetType.getLabel();
+    }
+
+    public AutoAction getAutoAction() {
+        return autoAction;
+    }
+
+    public Autable getAutable() {
+        return autoAction.resolve(noteStore, new Guid(guid));
     }
 
     public String getTagActionAsString() {
