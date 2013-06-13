@@ -13,6 +13,8 @@
   <f:entry title="Free word" field="word" name="word">
     <f:textbox />
   </f:entry>
+  <f:validateButton title="${%Search notes}" progress="${%Searching...}" method="searchNotes" with="word" />
+
   <f:radioBlock title="process target tag" name="target" value="Tag" checked="${instance.target == 'Tag' || instance.action == null}">
     <f:entry title="Tag Process Type" field="tagAction">
       <f:select />

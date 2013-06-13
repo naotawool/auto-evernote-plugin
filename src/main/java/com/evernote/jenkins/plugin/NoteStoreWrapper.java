@@ -106,6 +106,11 @@ public class NoteStoreWrapper {
         return noteList;
     }
 
+    public long countNotesByWord(String word) {
+        NoteList noteList = findNotesByWord(word);
+        return noteList.getNotes().size();
+    }
+
     public Note updateNote(Note note) {
         try {
             return noteStore.updateNote(token, note);

@@ -171,7 +171,7 @@ public class AutoActionBuilder extends Builder {
          * @return Indicates the outcome of the validation. This is sent to the
          *         browser.
          */
-        public FormValidation doCheckWord(@QueryParameter String value) {
+        public FormValidation doCheckWord(@QueryParameter final String value) {
             if (value.length() == 0) {
                 return FormValidation.error(Messages.AutoEvernote_required_searchTargetWord());
             }
@@ -212,6 +212,21 @@ public class AutoActionBuilder extends Builder {
             NoteStoreWrapper noteStore = new NoteStoreWrapper(developerToken(), useProduction());
             noteStore.initialize();
             return noteStore.listNotebooks();
+        }
+
+        public FormValidation doSearchNotes(@QueryParameter("word") final String word) {
+            if (word.length() == 0) {
+                return FormValidation.error(Messages.AutoEvernote_required_searchTargetWord());
+            }
+
+            NoteStoreWrapper noteStore = new NoteStoreWrapper(developerToken(), useProduction());
+            noteStore.initialize();
+
+            long count = noteStore.countNotesByWord(word);
+            if (count < 1) {
+                return FormValidation.warning(Messages.AutoEvernote_validate_findNotes_warning());
+            }
+            return FormValidation.ok(Messages.AutoEvernote_validate_findNotes_ok(count));
         }
 
         public boolean isApplicable(

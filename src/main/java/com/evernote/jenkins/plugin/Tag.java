@@ -1,6 +1,6 @@
 package com.evernote.jenkins.plugin;
 
-import com.evernote.jenkins.util.Util;
+import static com.evernote.jenkins.util.Util.not;
 
 public class Tag implements Autable {
 
@@ -34,7 +34,7 @@ public class Tag implements Autable {
 
     @Override
     public boolean equals(Object other) {
-        if (Util.not(other instanceof Tag)) {
+        if (not(other instanceof Tag)) {
             return false;
         }
         return guid.equals(Tag.class.cast(other));
