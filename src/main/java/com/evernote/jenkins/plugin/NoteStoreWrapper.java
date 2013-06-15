@@ -16,6 +16,7 @@ import com.evernote.edam.type.Tag;
 import com.evernote.edam.userstore.UserStore;
 import com.evernote.jenkins.evernote.NotebookComparator;
 import com.evernote.jenkins.evernote.TagComparator;
+import com.evernote.jenkins.evernote.auto.entry.Word;
 import com.evernote.thrift.TException;
 
 public class NoteStoreWrapper {
@@ -86,11 +87,11 @@ public class NoteStoreWrapper {
         return notebooks;
     }
 
-    public NoteList findNotesByWord(String word) {
+    public NoteList findNotesByWord(Word word) {
 
         NoteFilter filter = new NoteFilter();
         filter.setOrder(NoteSortOrder.CREATED.getValue());
-        filter.setWords(word);
+        filter.setWords(word.toString());
 
         return findNotes(filter);
     }
@@ -106,7 +107,7 @@ public class NoteStoreWrapper {
         return noteList;
     }
 
-    public long countNotesByWord(String word) {
+    public long countNotesByWord(Word word) {
         NoteList noteList = findNotesByWord(word);
         return noteList.getNotes().size();
     }

@@ -24,6 +24,7 @@ import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.Tag;
 import com.evernote.jenkins.evernote.auto.action.NotebookAction;
 import com.evernote.jenkins.evernote.auto.action.TagAction;
+import com.evernote.jenkins.evernote.auto.entry.Word;
 import com.evernote.jenkins.rule.EvernoteRule;
 
 /**
@@ -94,7 +95,7 @@ public class AutoActionBuilderTest {
         }
 
         private AutoActionBuilder createBuilder() {
-            return new AutoActionBuilder("Amazon", TargetType.TAG, TagAction.ADD,
+            return new AutoActionBuilder(Word.of("Amazon"), TargetType.TAG, TagAction.ADD,
                     presentTag.getGuid());
         }
     }
@@ -159,7 +160,7 @@ public class AutoActionBuilderTest {
         }
 
         private AutoActionBuilder createBuilder() {
-            return new AutoActionBuilder("Amazon", TargetType.TAG, TagAction.DELETE,
+            return new AutoActionBuilder(Word.of("Amazon"), TargetType.TAG, TagAction.DELETE,
                     presentTag.getGuid());
         }
     }
@@ -224,7 +225,7 @@ public class AutoActionBuilderTest {
         }
 
         private AutoActionBuilder createBuilder() {
-            return new AutoActionBuilder("Amazon", TargetType.NOTEBOOK,
+            return new AutoActionBuilder(Word.of("Amazon"), TargetType.NOTEBOOK,
                     NotebookAction.getInstance(), changeNotebook.getGuid());
         }
     }

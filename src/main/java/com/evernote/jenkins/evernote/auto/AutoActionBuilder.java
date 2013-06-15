@@ -26,6 +26,7 @@ import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.Tag;
 import com.evernote.jenkins.evernote.auto.action.AutoAction;
 import com.evernote.jenkins.evernote.auto.action.TagAction;
+import com.evernote.jenkins.evernote.auto.entry.Word;
 import com.evernote.jenkins.plugin.Autable;
 import com.evernote.jenkins.plugin.Guid;
 import com.evernote.jenkins.plugin.NoteDisplay;
@@ -33,7 +34,7 @@ import com.evernote.jenkins.plugin.NoteStoreWrapper;
 
 public class AutoActionBuilder extends Builder {
 
-    private final String word;
+    private final Word word;
     private final TargetType targetType;
     private final AutoAction autoAction;
     private final String guid;
@@ -41,7 +42,7 @@ public class AutoActionBuilder extends Builder {
     private transient final NoteStoreWrapper noteStore;
 
     @DataBoundConstructor
-    public AutoActionBuilder(String word, TargetType targetType, AutoAction autoAction, String guid) {
+    public AutoActionBuilder(Word word, TargetType targetType, AutoAction autoAction, String guid) {
 
         this.word = word;
         this.targetType = targetType;
@@ -52,7 +53,7 @@ public class AutoActionBuilder extends Builder {
         this.noteStore.initialize();
     }
 
-    public String getWord() {
+    public Word getWord() {
         return word;
     }
 
@@ -145,8 +146,8 @@ public class AutoActionBuilder extends Builder {
          */
         @Override
         public Builder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
-            String word = formData.getString("word");
-            if (StringUtils.isEmpty(word)) {
+            Word word = Word.of(formData.getString("word"));
+            if (word.isEmpty()) {
                 throw new FormException(Messages.AutoEvernote_required_developerToken(), "word");
             }
 
@@ -172,7 +173,7 @@ public class AutoActionBuilder extends Builder {
          *         browser.
          */
         public FormValidation doCheckWord(@QueryParameter final String value) {
-            if (value.length() == 0) {
+            if (Word.of(value).isEmpty()) {
                 return FormValidation.error(Messages.AutoEvernote_required_searchTargetWord());
             }
             return FormValidation.ok();
@@ -214,8 +215,9 @@ public class AutoActionBuilder extends Builder {
             return noteStore.listNotebooks();
         }
 
-        public FormValidation doSearchNotes(@QueryParameter("word") final String word) {
-            if (word.length() == 0) {
+        public FormValidation doSearchNotes(@QueryParameter("word") final String value) {
+            Word word = Word.of(value);
+            if (word.isEmpty()) {
                 return FormValidation.error(Messages.AutoEvernote_required_searchTargetWord());
             }
 

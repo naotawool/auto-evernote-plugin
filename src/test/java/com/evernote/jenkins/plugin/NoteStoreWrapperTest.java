@@ -26,6 +26,7 @@ import com.evernote.edam.type.Notebook;
 import com.evernote.edam.type.Tag;
 import com.evernote.edam.userstore.UserStore;
 import com.evernote.jenkins.TestUtils;
+import com.evernote.jenkins.evernote.auto.entry.Word;
 
 /**
  * {@link NoteStoreWrapper}に対するテストクラス。
@@ -136,7 +137,7 @@ public class NoteStoreWrapperTest {
         replay(noteStoreMock);
 
         // 実行
-        NoteList actual = testee.findNotesByWord("FooBar");
+        NoteList actual = testee.findNotesByWord(Word.of("FooBar"));
 
         // 検証
         assertThat(actual, theInstance(noteList));
