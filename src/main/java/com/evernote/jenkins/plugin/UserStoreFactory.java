@@ -1,7 +1,5 @@
 package com.evernote.jenkins.plugin;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.evernote.edam.userstore.UserStore;
 import com.evernote.jenkins.evernote.Constraints;
 import com.evernote.thrift.protocol.TBinaryProtocol;
@@ -36,7 +34,7 @@ class UserStoreFactory {
 
     private String resolveUrl(boolean useProduction) {
         if (useProduction) {
-            throw new NotImplementedException("Not support Production environment.");
+            return Constraints.USER_STORE_URL_PRODUCTION;
         }
         return Constraints.USER_STORE_URL_SANDBOX;
     }
