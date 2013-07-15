@@ -27,6 +27,7 @@ import com.evernote.edam.type.Tag;
 import com.evernote.jenkins.evernote.auto.action.AutoAction;
 import com.evernote.jenkins.evernote.auto.action.TagAction;
 import com.evernote.jenkins.evernote.auto.entry.Word;
+import com.evernote.jenkins.exception.EvernoteRuntimeException;
 import com.evernote.jenkins.plugin.Autable;
 import com.evernote.jenkins.plugin.Guid;
 import com.evernote.jenkins.plugin.NoteDisplay;
@@ -131,7 +132,7 @@ public class AutoActionBuilder extends Builder {
     /**
      * Descriptor for {@link AutoActionBuilder}. Used as a singleton. The class
      * is marked as public so that it can be accessed from views.
-     *
+     * 
      * @see {@code src/main/resources/com.evernote.jenkins.evernote.auto/AutoActionBuilder/*.jelly}
      */
     @Extension
@@ -140,7 +141,7 @@ public class AutoActionBuilder extends Builder {
         /**
          * To persist global configuration information, simply store it in a
          * field and call save().
-         *
+         * 
          * <p>
          * If you don't want fields to be persisted, use <tt>transient</tt>.
          */
@@ -148,7 +149,7 @@ public class AutoActionBuilder extends Builder {
         public Builder newInstance(StaplerRequest req, JSONObject formData) throws FormException {
             Word word = Word.of(formData.getString("word"));
             if (word.isEmpty()) {
-                throw new FormException(Messages.AutoEvernote_required_developerToken(), "word");
+                throw new FormException(Messages.AutoEvernote_required_searchTargetWord(), "word");
             }
 
             JSONObject target = formData.getJSONObject("target");
@@ -161,12 +162,24 @@ public class AutoActionBuilder extends Builder {
             AutoAction action = targetType.resolveAction(target);
             String guid = targetType.getGuid(target);
 
-            return new AutoActionBuilder(word, targetType, action, guid);
+            verifyDeveloperToken();
+            try {
+                return new AutoActionBuilder(word, targetType, action, guid);
+            } catch (EvernoteRuntimeException e) {
+                throw new FormException(Messages.AutoEvernote_validate_developerToken_error(),
+                        "word");
+            }
+        }
+
+        private void verifyDeveloperToken() throws FormException {
+            if (StringUtils.isEmpty(developerToken())) {
+                throw new FormException(Messages.AutoEvernote_required_developerToken(), "");
+            }
         }
 
         /**
          * Performs on-the-fly validation of the form field 'name'.
-         *
+         * 
          * @param value This parameter receives the value that the user has
          *        typed.
          * @return Indicates the outcome of the validation. This is sent to the

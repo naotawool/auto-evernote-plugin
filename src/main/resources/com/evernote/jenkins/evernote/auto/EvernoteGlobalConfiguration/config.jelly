@@ -11,4 +11,5 @@
             <f:checkbox />
         </f:entry>
     </f:section>
+    <f:validateButton title="${%Verify developer token}" progress="${%Verifying...}" method="verifyDeveloperToken" with="developerToken,production" />
 </j:jelly>

@@ -9,6 +9,9 @@ import org.apache.commons.lang.StringUtils;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
+import com.evernote.jenkins.exception.EvernoteRuntimeException;
+import com.evernote.jenkins.plugin.NoteStoreWrapper;
+
 @Extension
 public class EvernoteGlobalConfiguration extends GlobalConfiguration {
 
@@ -41,10 +44,6 @@ public class EvernoteGlobalConfiguration extends GlobalConfiguration {
         save();
     }
 
-    public String getDisplayName() {
-        return "aaaaaaaaaaaaaaa";
-    }
-
     @Override
     public boolean configure(StaplerRequest req, JSONObject json) throws FormException {
         req.bindJSON(this, json);
@@ -56,5 +55,18 @@ public class EvernoteGlobalConfiguration extends GlobalConfiguration {
             return FormValidation.warning(Messages.AutoEvernote_required_developerToken());
         }
         return FormValidation.ok();
+    }
+
+    public FormValidation doVerifyDeveloperToken(
+            @QueryParameter("developerToken") final String developerToken,
+            @QueryParameter("production") boolean useProduction) {
+
+        NoteStoreWrapper noteStore = new NoteStoreWrapper(developerToken, useProduction);
+        try {
+            noteStore.initialize();
+        } catch (EvernoteRuntimeException e) {
+            return FormValidation.error(Messages.AutoEvernote_validate_developerToken_error());
+        }
+        return FormValidation.ok(Messages.AutoEvernote_validate_developerToken_ok());
     }
 }

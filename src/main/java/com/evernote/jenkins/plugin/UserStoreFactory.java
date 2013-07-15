@@ -2,20 +2,21 @@ package com.evernote.jenkins.plugin;
 
 import com.evernote.edam.userstore.UserStore;
 import com.evernote.jenkins.evernote.Constraints;
+import com.evernote.jenkins.exception.EvernoteRuntimeException;
 import com.evernote.thrift.protocol.TBinaryProtocol;
 import com.evernote.thrift.transport.THttpClient;
 import com.evernote.thrift.transport.TTransportException;
 
 /**
  * {@link UserStore}を生成するファクトリクラス。
- *
+ * 
  * @author naotake
  */
 class UserStoreFactory {
 
     /**
      * {@link UserStore.Client}を生成する。
-     *
+     * 
      * @param useProduction 本番環境を使用するかどうか
      * @return {@link UserStore.Client}
      */
@@ -25,7 +26,7 @@ class UserStoreFactory {
         try {
             userStoreTrans = new THttpClient(resolveUrl(useProduction));
         } catch (TTransportException e) {
-            throw new RuntimeException(e);
+            throw new EvernoteRuntimeException(e);
         }
         TBinaryProtocol userStoreProtocol = new TBinaryProtocol(userStoreTrans);
 

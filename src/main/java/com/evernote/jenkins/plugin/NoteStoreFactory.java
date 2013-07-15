@@ -4,6 +4,7 @@ import com.evernote.edam.error.EDAMSystemException;
 import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.notestore.NoteStore;
 import com.evernote.edam.userstore.UserStore;
+import com.evernote.jenkins.exception.EvernoteRuntimeException;
 import com.evernote.thrift.TException;
 import com.evernote.thrift.protocol.TBinaryProtocol;
 import com.evernote.thrift.transport.THttpClient;
@@ -11,14 +12,14 @@ import com.evernote.thrift.transport.TTransportException;
 
 /**
  * {@link NoteStore}を生成するファクトリクラス。
- *
+ * 
  * @author naotake
  */
 class NoteStoreFactory {
 
     /**
      * 指定したユーザの{@link UserStore.Client}を生成する。
-     *
+     * 
      * @param token Developer Token
      * @param userStore {@link NoteStore.Client}
      * @return {@link UserStore.Client}
@@ -29,14 +30,14 @@ class NoteStoreFactory {
         try {
             noteStoreUrl = userStore.getNoteStoreUrl(token);
         } catch (EDAMUserException | EDAMSystemException | TException e) {
-            throw new RuntimeException(e);
+            throw new EvernoteRuntimeException(e);
         }
 
         THttpClient noteStoreTrans;
         try {
             noteStoreTrans = new THttpClient(noteStoreUrl);
         } catch (TTransportException e) {
-            throw new RuntimeException(e);
+            throw new EvernoteRuntimeException(e);
         }
         TBinaryProtocol noteStoreProt = new TBinaryProtocol(noteStoreTrans);
 
